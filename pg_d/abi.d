@@ -1,4 +1,4 @@
-module abi;
+module pg_d.abi;
 
 extern (C):
 

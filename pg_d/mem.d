@@ -1,4 +1,4 @@
-module mem;
+module pg_d.mem;
 
 /**
 Minimalistic declarations to work with memory in PostgreSQL

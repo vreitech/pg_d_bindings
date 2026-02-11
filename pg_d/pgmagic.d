@@ -1,4 +1,4 @@
-module pgmagic;
+module pg_d.pgmagic;
 
 extern (C):
 

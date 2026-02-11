@@ -1,7 +1,7 @@
-module pgtext;
+module pg_d.pgtext;
 
-import abi;
-import mem;
+import pg_d.abi;
+import pg_d.mem;
 import core.stdc.string : strlen, memcpy;
 
 enum int VARHDRSZ = 4;   // standard varlena header (4 bytes)
@@ -60,4 +60,3 @@ const(char)* text_to_cstring(text* t)
 
     return outbuf;
 }
-

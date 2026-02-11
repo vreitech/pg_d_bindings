@@ -1,8 +1,8 @@
-module srf;
+module pg_d.srf;
 
-import abi;
-import fmgr;
-import mem;
+import pg_d.abi;
+import pg_d.fmgr;
+import pg_d.mem;
 
 extern (C):
 

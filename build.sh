@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ldc2 -betterC -shared -relocation-model=pic abi.d fmgr.d mem.d pgtext.d srf.d pgmagic.d extension_example.d -of=extension_example.so
+ldc2 -betterC -shared -relocation-model=pic pg_d/abi.d pg_d/fmgr.d pg_d/mem.d pg_d/pgtext.d pg_d/srf.d pg_d/pgmagic.d extension_example.d -of=extension_example.so

@@ -1,9 +1,9 @@
 module extension_example;
 
-import abi;     // contains Datum, FunctionCallInfo, NullableDatum, text etc.
-import fmgr;    // contains PG_GETARG_* / PG_RETURN_* (minimal)
-import srf;     // if SRF skeleton is needed
-// import pgtext;  // if you use text helpers
+import pg_d.abi;     // contains Datum, FunctionCallInfo, NullableDatum, text etc.
+import pg_d.fmgr;    // contains PG_GETARG_* / PG_RETURN_* (minimal)
+import pg_d.srf;     // if SRF skeleton is needed
+// import pg_d.pgtext;  // if you use text helpers
 
 extern (C):
 

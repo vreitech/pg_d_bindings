@@ -1,6 +1,6 @@
-module fmgr;
+module pg_d.fmgr;
 
-import abi;
+import pg_d.abi;
 import core.stdc.string : memcpy;
 
 extern (C):
