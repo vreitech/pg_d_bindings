@@ -1,9 +1,9 @@
 module extension_example;
 
-import abi;   // contains Datum, FunctionCallInfo, NullableDatum, text etc.
-import fmgr;  // contains PG_GETARG_* / PG_RETURN_* (minimal)
-import srf;   // if SRF skeleton is needed
-// import pgtext; // if you use text helpers
+import abi;     // contains Datum, FunctionCallInfo, NullableDatum, text etc.
+import fmgr;    // contains PG_GETARG_* / PG_RETURN_* (minimal)
+import srf;     // if SRF skeleton is needed
+// import pgtext;  // if you use text helpers
 
 extern (C):
 
@@ -81,7 +81,7 @@ template RegisterPgFunction(string func)
 }
 
 /**
- * Automatic registration of all functions
+ * Declaration of all functions that can be registered
  */
 static enum string[] exportedFunctions = [
     "myfunction",
@@ -91,6 +91,9 @@ static enum string[] exportedFunctions = [
     "printt"
 ];
 
+/**
+ * Automatic registration of all functions
+ */
 static foreach (fname; exportedFunctions)
 {
     mixin RegisterPgFunction!(fname);
