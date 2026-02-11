@@ -1,4 +1,4 @@
-pg_d_binding is a binding project for PostgreSQL.
+pg_d_binding is a D language binding project for PostgreSQL.
 
 It's alpha version now.
 
