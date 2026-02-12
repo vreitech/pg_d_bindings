@@ -1,15 +1,15 @@
 module extension_example;
 
-import pg_d.abi;     // contains Datum, FunctionCallInfo, NullableDatum, text etc.
-import pg_d.fmgr;    // contains PG_GETARG_* / PG_RETURN_* (minimal)
-import pg_d.srf;     // if SRF skeleton is needed
-// import pg_d.pgtext;  // if you use text helpers
+import pg_d.abi;     // Datum, FunctionCallInfo, NullableDatum, text, bytea, etc.
+import pg_d.fmgr;    // PG_GETARG_* / PG_RETURN_* helpers
+import pg_d.srf;     // SRF functions
+// import pg_d.pgtext;  // optional extra text helpers
 
 extern (C):
 
 /**
- * myfunction: doubles int
- */
+myfunction: doubles int
+*/
 export extern(C) Datum myfunction(FunctionCallInfo fcinfo)
 {
     int arg = PG_GETARG_INT32(fcinfo, 0);
@@ -17,8 +17,8 @@ export extern(C) Datum myfunction(FunctionCallInfo fcinfo)
 }
 
 /**
- * debug function: returns nargs
- */
+debug function: returns nargs
+*/
 export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
 {
     int nargs = cast(int)fcinfo.nargs;
@@ -26,16 +26,16 @@ export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
 }
 
 /**
- * test_simple: test function without arguments
- */
+test_simple: test function without arguments
+*/
 export extern(C) Datum test_simple(FunctionCallInfo fcinfo)
 {
     return cast(Datum)42;
 }
 
 /**
- * add_numbers: addition of two numbers
- */
+add_numbers: addition of two numbers
+*/
 export extern(C) Datum add_numbers(FunctionCallInfo fcinfo)
 {
     int arg1 = PG_GETARG_INT32(fcinfo, 0);
@@ -44,56 +44,60 @@ export extern(C) Datum add_numbers(FunctionCallInfo fcinfo)
 }
 
 /**
- * printt: prints text
- */
+printt: prints text
+*/
 export extern(C) Datum printt(FunctionCallInfo fcinfo)
 {
-    text* arg = PG_GETARG_VARLENA(fcinfo, 0);
+    text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
     return PG_RETURN_VARLENA(fcinfo, arg);
 }
 
 /**
- * RegisterPgFunction generates in the binary symbol:
- *   export extern(C) const(Pg_finfo_record)* pg_finfo_<func>()
- * which is equivalent to PG_FUNCTION_INFO_V1(func) in C.
- *
- * Usage:
- *   mixin RegisterPgFunction!"myfunction";
- * or
- *   enum funcs = ["myfunction","myfunction_debug"];
- *   static foreach (f; funcs) mixin RegisterPgFunction!(f);
- */
-template RegisterPgFunction(string func)
+printb: prints bytea (binary data)
+*/
+export extern(C) Datum printb(FunctionCallInfo fcinfo)
 {
-    // Simple name validation (compiler-time)
-    static if (func.length == 0)
-        static assert(false, "RegisterPgFunction: empty function name");
-
-    // Assemble function body as string and insert via mixin
-    enum string finfoName = "pg_finfo_" ~ func;
-
-    // Generate code for pg_finfo_<func>
-    mixin("export extern(C) const(Pg_finfo_record)* " ~ finfoName ~ "()\n" ~
-          "{\n" ~
-          "    __gshared Pg_finfo_record info = Pg_finfo_record(1);\n" ~
-          "    return &info;\n" ~
-          "}\n");
+    bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);  // detoast-safe bytea
+    return PG_RETURN_BYTEA(fcinfo, arg);
 }
 
 /**
- * Declaration of all functions that can be registered
- */
+RegisterPgFunction generates in the binary symbol:
+  export extern(C) const(Pg_finfo_record)* pg_finfo_<func>()
+which is equivalent to PG_FUNCTION_INFO_V1(func) in C.
+*/
+template RegisterPgFunction(string func)
+{
+    // compile-time name validation
+    static if (func.length == 0)
+        static assert(false, "RegisterPgFunction: empty function name");
+
+    // assemble function body as string and insert via mixin
+    enum string finfoName = "pg_finfo_" ~ func;
+
+    // generate code for pg_finfo_<func>
+    mixin("export extern(C) const(Pg_finfo_record)* " ~ finfoName ~ "()\n" ~
+        "{\n" ~
+        "    __gshared Pg_finfo_record info = Pg_finfo_record(1);\n" ~
+        "    return &info;\n" ~
+        "}\n");
+}
+
+/**
+Declaration of all functions that can be registered
+*/
 static enum string[] exportedFunctions = [
     "myfunction",
     "myfunction_debug",
     "test_simple",
     "add_numbers",
-    "printt"
+    "printt",
+    "printb"
 ];
 
 /**
- * Automatic registration of all functions
- */
+Automatic registration of all functions
+*/
 static foreach (fname; exportedFunctions)
 {
     mixin RegisterPgFunction!(fname);

@@ -59,4 +59,13 @@ struct varlena
     int vl_len_;
 // flexible data follows
 }
+
+/**
+Alias for text
+*/
 alias text = varlena;
+
+/**
+Alias for bytea
+*/
+alias bytea = varlena; // bytea is the same low-level varlena layout as text
