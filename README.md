@@ -1,10 +1,10 @@
-* pg_d_binding is a D language binding project for PostgreSQL.
+# pg_d_binding is a D language binding project for PostgreSQL.
 
 It's alpha version now.
 
 PostgreSQL 18 only supported at this moment.
 
-* Build
+### Build
 - Build using `./build.sh` (needs ldc2 compiler)
 - Get PostgreSQL `$libdir` directory name, for example:
 ```
