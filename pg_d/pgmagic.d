@@ -32,17 +32,21 @@ struct Pg_magic_struct
 Constants (PostgreSQL 18)
 */
 
-enum int PG_VERSION_NUM  = 18_00_00;
-enum int FUNC_MAX_ARGS   = 100;
-enum int INDEX_MAX_KEYS  = 32;
-enum int NAMEDATALEN     = 64;
-enum int FLOAT8PASSBYVAL = 1;
+enum int PG_VERSION_NUM    = 18_00_00;
+enum int FUNC_MAX_ARGS     = 100;
+enum int INDEX_MAX_KEYS    = 32;
+enum int NAMEDATALEN       = 64;
+enum int FLOAT8PASSBYVAL   = 1;
 
 /**
 Static data
 */
 
 __gshared char[11] pg_name_str = "PostgreSQL";
+
+/**
+pg_magic_data
+*/
 
 __gshared Pg_magic_struct pg_magic_data = {
     Pg_magic_struct.sizeof,
@@ -57,20 +61,6 @@ __gshared Pg_magic_struct pg_magic_data = {
     cast(const(char)*)pg_name_str.ptr,
     null
 };
-
-/**
-ABI code
-*/
-
-struct Pg_abi_struct
-{
-    int abi_code;
-}
-
-enum PG_MODULE_ABI_CODE = 2025_0629_1; // PostgreSQL 18 ABI
-
-__gshared extern(C) const Pg_abi_struct PG_MODULE_ABI_DATA =
-    Pg_abi_struct(PG_MODULE_ABI_CODE);
 
 /**
 Exported Pg_magic_func function
