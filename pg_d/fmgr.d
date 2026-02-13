@@ -142,8 +142,7 @@ text* PG_GETARG_TEXT_PP(FunctionCallInfo fcinfo, int n)
 }
 
 /**
-Return a varlena value to PostgreSQL.
-Marks the return value as non-null and converts pointer to Datum.
+Return varlena value to PostgreSQL as Datum.
 */
 Datum PG_RETURN_VARLENA(FunctionCallInfo fcinfo, text* t)
 {
@@ -152,8 +151,7 @@ Datum PG_RETURN_VARLENA(FunctionCallInfo fcinfo, text* t)
 }
 
 /**
-Return a bytea value to PostgreSQL.
-Marks the return value as non-null and converts pointer to Datum.
+Convert Datum to bytea* (packed/plain pointer) helper.
 */
 bytea* DatumGetByteaPP(Datum d)
 {
@@ -182,8 +180,7 @@ bytea* PG_GETARG_VARBYTEA(FunctionCallInfo fcinfo, int n)
 }
 
 /**
-Return bytea value to PostgreSQL (as Datum).
-Marks return as non-null and converts pointer to Datum.
+Return bytea value to PostgreSQL as Datum.
 */
 Datum PG_RETURN_BYTEA(FunctionCallInfo fcinfo, bytea* b)
 {
@@ -206,11 +203,47 @@ void* VARDATA_BYTEA(bytea* b)
 }
 
 /**
-Return text value to PostgreSQL (as Datum).
-Marks return as non-null and converts pointer to Datum.
+Return varchar value to PostgreSQL as Datum.
+*/
+Datum PG_RETURN_VARCHAR(FunctionCallInfo fcinfo, text* t)
+{
+    fcinfo.isnull = false;
+    return PointerGetDatum(cast(void*)t);
+}
+
+/**
+Return text value to PostgreSQL as Datum.
 */
 Datum PG_RETURN_TEXT(FunctionCallInfo fcinfo, text* t)
 {
     fcinfo.isnull = false;
     return PointerGetDatum(cast(void*)t);
 }
+
+/**
+Return C-string (null-terminated) to PostgreSQL as Datum.
+*/
+Datum PG_RETURN_CSTRING(FunctionCallInfo fcinfo, const(char)* s)
+{
+    fcinfo.isnull = false;
+    return PointerGetDatum(cast(void*)s);
+}
+
+/**
+Return Name (fixed-length name type) to PostgreSQL as Datum.
+*/
+Datum PG_RETURN_NAME(FunctionCallInfo fcinfo, const(char)* n)
+{
+    fcinfo.isnull = false;
+    return PointerGetDatum(cast(void*)n);
+}
+
+/**
+Return bpchar (blank-padded char) to PostgreSQL as Datum.
+*/
+Datum PG_RETURN_BPCHAR(FunctionCallInfo fcinfo, text* t)
+{
+    fcinfo.isnull = false;
+    return PointerGetDatum(cast(void*)t);
+}
+

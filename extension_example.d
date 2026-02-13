@@ -17,7 +17,7 @@ export extern(C) Datum myfunction(FunctionCallInfo fcinfo)
 }
 
 /**
-debug function: returns nargs
+myfunction_debug: returns nargs
 */
 export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
 {
@@ -44,18 +44,36 @@ export extern(C) Datum add_numbers(FunctionCallInfo fcinfo)
 }
 
 /**
-printt: prints text
+print_text: prints text
 */
-export extern(C) Datum printt(FunctionCallInfo fcinfo)
+export extern(C) Datum print_text(FunctionCallInfo fcinfo)
 {
     text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
     return PG_RETURN_TEXT(fcinfo, arg);
 }
 
 /**
-printb: prints bytea (binary data)
+print_varchar: prints varchar
 */
-export extern(C) Datum printb(FunctionCallInfo fcinfo)
+export extern(C) Datum print_varchar(FunctionCallInfo fcinfo)
+{
+    text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
+    return PG_RETURN_VARCHAR(fcinfo, arg);
+}
+
+/**
+print_name: prints name
+*/
+export extern(C) Datum print_name(FunctionCallInfo fcinfo)
+{
+    bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);  // detoast-safe text
+    return PG_RETURN_BYTEA(fcinfo, arg);
+}
+
+/**
+print_bytea: prints bytea (binary data)
+*/
+export extern(C) Datum print_bytea(FunctionCallInfo fcinfo)
 {
     bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);  // detoast-safe bytea
     return PG_RETURN_BYTEA(fcinfo, arg);
@@ -91,8 +109,10 @@ static enum string[] exportedFunctions = [
     "myfunction_debug",
     "test_simple",
     "add_numbers",
-    "printt",
-    "printb"
+    "print_text",
+    "print_varchar",
+    "print_name",
+    "print_bytea"
 ];
 
 /**
