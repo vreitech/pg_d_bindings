@@ -4,17 +4,10 @@ import pg_d.abi;                 // Datum, FunctionCallInfo, NullableDatum, text
 import core.stdc.string : memcpy; // memcpy used for low-level operations
 
 extern (C):
-
-/**
-Basic fmgr helpers for D binding to PostgreSQL 17/18 that
-follows the server ABI.
-Provides argument extraction, Datum-pointer conversions,
-and varlena/text helpers including detoast.
-*/
-
 /**
 Return raw Datum argument from FunctionCallInfo.
 */
+
 Datum PG_GETARG_DATUM(FunctionCallInfo fcinfo, int n)
 {
     return fcinfo_args(fcinfo)[n].value;
@@ -49,6 +42,7 @@ Datum PG_RETURN_INT32(FunctionCallInfo fcinfo, int x)
 Registration structure for pg_finfo_* symbols.
 This structure mimics the small info-record used by PG_FUNCTION_INFO_V1.
 */
+
 struct Pg_finfo_record
 {
     int api_version;
@@ -57,6 +51,7 @@ struct Pg_finfo_record
 /**
 Convert a native pointer to Datum.
 */
+
 Datum PointerGetDatum(void* p)
 {
     return cast(Datum) p;
@@ -73,6 +68,7 @@ void* DatumGetPointer(Datum d)
 /**
 Get pointer argument from fcinfo (wrapper).
 */
+
 void* PG_GETARG_POINTER(FunctionCallInfo fcinfo, int n)
 {
     return DatumGetPointer(PG_GETARG_DATUM(fcinfo, n));
@@ -138,6 +134,7 @@ text* PG_GETARG_VARLENA(FunctionCallInfo fcinfo, int n)
 Get text argument (packed/plain pointer) and detoast if needed.
 This mirrors the C macro PG_GETARG_TEXT_PP from fmgr.h.
 */
+
 text* PG_GETARG_TEXT_PP(FunctionCallInfo fcinfo, int n)
 {
     Datum d = PG_GETARG_DATUM(fcinfo, n);
@@ -145,7 +142,7 @@ text* PG_GETARG_TEXT_PP(FunctionCallInfo fcinfo, int n)
 }
 
 /**
-Return a varlena/text value to PostgreSQL.
+Return a varlena value to PostgreSQL.
 Marks the return value as non-null and converts pointer to Datum.
 */
 Datum PG_RETURN_VARLENA(FunctionCallInfo fcinfo, text* t)
@@ -155,10 +152,9 @@ Datum PG_RETURN_VARLENA(FunctionCallInfo fcinfo, text* t)
 }
 
 /**
-Bytea helpers (TOAST-safe)
+Return a bytea value to PostgreSQL.
+Marks the return value as non-null and converts pointer to Datum.
 */
-
-/// Return bytea* from Datum (Datum -> bytea*).
 bytea* DatumGetByteaPP(Datum d)
 {
     // Datum -> pointer, then detoast.
@@ -207,4 +203,14 @@ int VARSIZE_BYTEA(bytea* b)
 void* VARDATA_BYTEA(bytea* b)
 {
     return VARDATA_ANY(cast(void*)b);
+}
+
+/**
+Return text value to PostgreSQL (as Datum).
+Marks return as non-null and converts pointer to Datum.
+*/
+Datum PG_RETURN_TEXT(FunctionCallInfo fcinfo, text* t)
+{
+    fcinfo.isnull = false;
+    return PointerGetDatum(cast(void*)t);
 }

@@ -49,7 +49,7 @@ printt: prints text
 export extern(C) Datum printt(FunctionCallInfo fcinfo)
 {
     text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
-    return PG_RETURN_VARLENA(fcinfo, arg);
+    return PG_RETURN_TEXT(fcinfo, arg);
 }
 
 /**
