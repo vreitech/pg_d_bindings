@@ -2,6 +2,8 @@
 
 It's alpha version now.
 
+CAUTION! At least at this moment it's a lot of LLM generated content in the project! I hope it will be changed in time.
+
 PostgreSQL 18 only supported at this moment.
 
 ### Build

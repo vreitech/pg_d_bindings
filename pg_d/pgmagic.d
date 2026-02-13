@@ -42,7 +42,7 @@ enum int FLOAT8PASSBYVAL = 1;
 Static data
 */
 
-__gshared char[11] pg_name_str = ['P','o','s','t','g','r','e','S','Q','L',0];
+__gshared char[11] pg_name_str = "PostgreSQL";
 
 __gshared Pg_magic_struct pg_magic_data = {
     Pg_magic_struct.sizeof,
@@ -52,8 +52,7 @@ __gshared Pg_magic_struct pg_magic_data = {
         INDEX_MAX_KEYS,
         NAMEDATALEN,
         FLOAT8PASSBYVAL,
-        ['P','o','s','t','g','r','e','S','Q','L',0,
-         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        cast(char[32])("PostgreSQL")
     ),
     cast(const(char)*)pg_name_str.ptr,
     null
