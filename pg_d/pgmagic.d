@@ -39,12 +39,6 @@ enum int NAMEDATALEN       = 64;
 enum int FLOAT8PASSBYVAL   = 1;
 
 /**
-Static data
-*/
-
-__gshared char[11] pg_name_str = "PostgreSQL";
-
-/**
 pg_magic_data
 */
 
@@ -58,7 +52,6 @@ __gshared Pg_magic_struct pg_magic_data = {
         FLOAT8PASSBYVAL,
         cast(char[32])("PostgreSQL")
     ),
-    cast(const(char)*)pg_name_str.ptr,
     null
 };
 
