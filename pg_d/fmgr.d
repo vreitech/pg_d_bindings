@@ -4,6 +4,29 @@ import pg_d.abi;                 // Datum, FunctionCallInfo, NullableDatum, text
 import core.stdc.string : memcpy; // memcpy used for low-level operations
 
 extern (C):
+
+/**
+Basic FunctionCallInfoBaseData structure (w/o inline args)
+*/
+
+struct FunctionCallInfoBaseData
+{
+    void* flinfo;
+    void* context;
+    void* resultinfo;
+    Oid fncollation;
+    bool isnull;
+    short nargs;
+// inline args follow immediately after this struct in memory
+}
+
+alias FunctionCallInfo = FunctionCallInfoBaseData*;
+
+/**
+fcinfo_args helper
+Get pointer to the first NullableDatum after the structure
+*/
+
 /**
 Return raw Datum argument from FunctionCallInfo.
 */

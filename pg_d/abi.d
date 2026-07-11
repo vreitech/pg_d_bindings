@@ -23,27 +23,6 @@ struct NullableDatum
     bool isnull;
 }
 
-/**
-Basic FunctionCallInfoBaseData structure (w/o inline args)
-*/
-
-struct FunctionCallInfoBaseData
-{
-    void* flinfo;
-    void* context;
-    void* resultinfo;
-    Oid fncollation;
-    bool isnull;
-    short nargs;
-// inline args follow immediately after this struct in memory
-}
-
-alias FunctionCallInfo = FunctionCallInfoBaseData*;
-
-/**
-fcinfo_args helper
-Get pointer to the first NullableDatum after the structure
-*/
 
 NullableDatum* fcinfo_args(FunctionCallInfo fcinfo)
 {
