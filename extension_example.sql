@@ -7,7 +7,7 @@ CREATE OR REPLACE FUNCTION print_name(name) RETURNS name AS '$libdir/extension_e
 CREATE OR REPLACE FUNCTION print_bytea(bytea) RETURNS bytea AS '$libdir/extension_example', 'print_bytea' LANGUAGE C STRICT;
 
 SELECT myfunction_debug(42); -- 1
-SELECT myfunction(42); -- 42
+SELECT myfunction(42); -- 84
 SELECT add_numbers(42,44); -- 86
 SELECT print_text('Test text') AS value, pg_typeof(print_text('Test text')) AS type; -- 'Test text', 'text'
 SELECT length(repeat('x', 5000)) AS expected_len,

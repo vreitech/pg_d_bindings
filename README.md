@@ -16,5 +16,5 @@ echo $libdir
 - Copy library .so file there: `sudo cp extension_example.so $libdir`
 - Run `extension_example.sql` like:
 ```
-cat extension_example.sql | sudo -i -u postgres psql -f -
+cat extension_example.sql | sudo -i -u postgres psql -a -f -
 ```
