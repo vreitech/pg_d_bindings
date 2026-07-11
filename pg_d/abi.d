@@ -1,5 +1,7 @@
 module pg_d.abi;
 
+import pg_d.fmgr;
+
 extern (C):
 
 /**
@@ -22,7 +24,6 @@ struct NullableDatum
     Datum value;
     bool isnull;
 }
-
 
 NullableDatum* fcinfo_args(FunctionCallInfo fcinfo)
 {
