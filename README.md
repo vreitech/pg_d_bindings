@@ -7,14 +7,9 @@ CAUTION! At least at this moment it's a lot of LLM generated content in the proj
 PostgreSQL 18 only supported at this moment.
 
 ### Build
-- Build using `./build.sh` (needs ldc2 compiler)
-- Get PostgreSQL `$libdir` directory name, for example:
+- Build using `./build.sh` (needs ldc2 compiler and installed PostgreSQL 18 from PGDG repo on CentOS-based Linux; patch directories byself for other distros)
+- Run `test.sql` like:
 ```
-export libdir=$(sudo -i -u postgres psql -Aqtc "SELECT setting FROM pg_config where name = 'LIBDIR'")
-echo $libdir
+cat test.sql | sudo -i -u postgres psql -a -f -
 ```
-- Copy library .so file there: `sudo cp extension_example.so $libdir`
-- Run `extension_example.sql` like:
-```
-cat extension_example.sql | sudo -i -u postgres psql -a -f -
-```
+

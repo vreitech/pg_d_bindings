@@ -1,0 +1,4 @@
+comment = 'Example extension in D language'
+default_version = '1.0'
+module_pathname = '$libdir/extension_example'
+relocatable = true

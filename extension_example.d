@@ -26,14 +26,6 @@ export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
 }
 
 /**
-test_simple: test function without arguments
-*/
-export extern(C) Datum test_simple(FunctionCallInfo fcinfo)
-{
-    return cast(Datum)42;
-}
-
-/**
 add_numbers: addition of two numbers
 */
 export extern(C) Datum add_numbers(FunctionCallInfo fcinfo)
@@ -107,7 +99,6 @@ Declaration of all functions that can be registered
 static enum string[] exportedFunctions = [
     "myfunction",
     "myfunction_debug",
-    "test_simple",
     "add_numbers",
     "print_text",
     "print_varchar",
