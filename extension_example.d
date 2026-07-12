@@ -1,6 +1,7 @@
 module extension_example;
 
-import pg_d.abi;     // Datum, FunctionCallInfo, NullableDatum, text, bytea, etc.
+import pg_d.helper;  // RegisterAllPgFunctions
+import pg_d.abi;     // Datum, FunctionCallInfo, Pg_finfo_record
 import pg_d.fmgr;    // PG_GETARG_* / PG_RETURN_* helpers
 import pg_d.srf;     // SRF functions
 // import pg_d.pgtext;  // optional extra text helpers
@@ -10,6 +11,7 @@ extern (C):
 /**
 myfunction: doubles int
 */
+@PgFunction
 export extern(C) Datum myfunction(FunctionCallInfo fcinfo)
 {
     int arg = PG_GETARG_INT32(fcinfo, 0);
@@ -19,6 +21,7 @@ export extern(C) Datum myfunction(FunctionCallInfo fcinfo)
 /**
 myfunction_debug: returns nargs
 */
+@PgFunction
 export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
 {
     int nargs = cast(int)fcinfo.nargs;
@@ -28,6 +31,7 @@ export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
 /**
 add_numbers: addition of two numbers
 */
+@PgFunction
 export extern(C) Datum add_numbers(FunctionCallInfo fcinfo)
 {
     int arg1 = PG_GETARG_INT32(fcinfo, 0);
@@ -38,6 +42,7 @@ export extern(C) Datum add_numbers(FunctionCallInfo fcinfo)
 /**
 print_text: prints text
 */
+@PgFunction
 export extern(C) Datum print_text(FunctionCallInfo fcinfo)
 {
     text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
@@ -47,6 +52,7 @@ export extern(C) Datum print_text(FunctionCallInfo fcinfo)
 /**
 print_varchar: prints varchar
 */
+@PgFunction
 export extern(C) Datum print_varchar(FunctionCallInfo fcinfo)
 {
     text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
@@ -56,6 +62,7 @@ export extern(C) Datum print_varchar(FunctionCallInfo fcinfo)
 /**
 print_name: prints name
 */
+@PgFunction
 export extern(C) Datum print_name(FunctionCallInfo fcinfo)
 {
     bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);  // detoast-safe text
@@ -65,6 +72,7 @@ export extern(C) Datum print_name(FunctionCallInfo fcinfo)
 /**
 print_bytea: prints bytea (binary data)
 */
+@PgFunction
 export extern(C) Datum print_bytea(FunctionCallInfo fcinfo)
 {
     bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);  // detoast-safe bytea
@@ -72,44 +80,6 @@ export extern(C) Datum print_bytea(FunctionCallInfo fcinfo)
 }
 
 /**
-RegisterPgFunction generates in the binary symbol:
-  export extern(C) const(Pg_finfo_record)* pg_finfo_<func>()
-which is equivalent to PG_FUNCTION_INFO_V1(func) in C.
-*/
-template RegisterPgFunction(string func)
-{
-    // compile-time name validation
-    static if (func.length == 0)
-        static assert(false, "RegisterPgFunction: empty function name");
-
-    // assemble function body as string and insert via mixin
-    enum string finfoName = "pg_finfo_" ~ func;
-
-    // generate code for pg_finfo_<func>
-    mixin("export extern(C) const(Pg_finfo_record)* " ~ finfoName ~ "()\n" ~
-        "{\n" ~
-        "    __gshared Pg_finfo_record info = Pg_finfo_record(1);\n" ~
-        "    return &info;\n" ~
-        "}\n");
-}
-
-/**
-Declaration of all functions that can be registered
-*/
-static enum string[] exportedFunctions = [
-    "myfunction",
-    "myfunction_debug",
-    "add_numbers",
-    "print_text",
-    "print_varchar",
-    "print_name",
-    "print_bytea"
-];
-
-/**
 Automatic registration of all functions
 */
-static foreach (fname; exportedFunctions)
-{
-    mixin RegisterPgFunction!(fname);
-}
+mixin RegisterAllPgFunctions;
