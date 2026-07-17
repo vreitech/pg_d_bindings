@@ -19,7 +19,7 @@ export extern(C) Datum myfunction(FunctionCallInfo fcinfo)
 }
 
 /**
-myfunction_debug: returns nargs
+myfunction_debug: returns number of arguments
 */
 @PgFunction
 export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
@@ -29,7 +29,7 @@ export extern(C) Datum myfunction_debug(FunctionCallInfo fcinfo)
 }
 
 /**
-add_numbers: addition of two numbers
+add_numbers: addition of two integers
 */
 @PgFunction
 export extern(C) Datum add_numbers(FunctionCallInfo fcinfo)
@@ -45,7 +45,7 @@ print_text: prints text
 @PgFunction
 export extern(C) Datum print_text(FunctionCallInfo fcinfo)
 {
-    text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
+    text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);
     return PG_RETURN_TEXT(fcinfo, arg);
 }
 
@@ -55,7 +55,7 @@ print_varchar: prints varchar
 @PgFunction
 export extern(C) Datum print_varchar(FunctionCallInfo fcinfo)
 {
-    text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);  // detoast-safe text
+    text* arg = PG_GETARG_TEXT_PP(fcinfo, 0);
     return PG_RETURN_VARCHAR(fcinfo, arg);
 }
 
@@ -65,8 +65,8 @@ print_name: prints name
 @PgFunction
 export extern(C) Datum print_name(FunctionCallInfo fcinfo)
 {
-    bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);  // detoast-safe text
-    return PG_RETURN_BYTEA(fcinfo, arg);
+    name* arg = PG_GETARG_NAME(fcinfo, 0);
+    return PG_RETURN_NAME(fcinfo, arg);
 }
 
 /**
@@ -75,7 +75,7 @@ print_bytea: prints bytea (binary data)
 @PgFunction
 export extern(C) Datum print_bytea(FunctionCallInfo fcinfo)
 {
-    bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);  // detoast-safe bytea
+    bytea* arg = PG_GETARG_BYTEA_PP(fcinfo, 0);
     return PG_RETURN_BYTEA(fcinfo, arg);
 }
 

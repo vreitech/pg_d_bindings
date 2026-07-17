@@ -40,6 +40,19 @@ struct varlena
 // flexible data follows
 }
 
+enum NAMEDATALEN = 64;
+
+struct NameData
+{
+    char[NAMEDATALEN] data;
+}
+
+/**
+Alias for name
+*/
+
+alias name = NameData;
+
 /**
 Alias for text
 */

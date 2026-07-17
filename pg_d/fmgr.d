@@ -145,6 +145,15 @@ text* DatumGetTextPP(Datum d)
 }
 
 /**
+Get name argument without detoasting.
+This is a low-level helper and unsafe for toasted values.
+*/
+name* PG_GETARG_NAME(FunctionCallInfo fcinfo, int n)
+{
+    return cast(name*) PG_GETARG_POINTER(fcinfo, n);
+}
+
+/**
 Get varlena/text argument without detoasting.
 This is a low-level helper and unsafe for toasted values.
 */
@@ -253,9 +262,9 @@ Datum PG_RETURN_CSTRING(FunctionCallInfo fcinfo, const(char)* s)
 }
 
 /**
-Return Name (fixed-length name type) to PostgreSQL as Datum.
+Return Name (name type) to PostgreSQL as Datum.
 */
-Datum PG_RETURN_NAME(FunctionCallInfo fcinfo, const(char)* n)
+Datum PG_RETURN_NAME(FunctionCallInfo fcinfo, name* n)
 {
     fcinfo.isnull = false;
     return PointerGetDatum(cast(void*)n);
