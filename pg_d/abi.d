@@ -42,9 +42,10 @@ struct varlena
 
 enum NAMEDATALEN = 64;
 
+// not sure actually, but probably ubyte instead of char is better solution here 
 struct NameData
 {
-    char[NAMEDATALEN] data;
+    ubyte[NAMEDATALEN] data;
 }
 
 /**
