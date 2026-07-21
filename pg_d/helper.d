@@ -1,6 +1,6 @@
 module pg_d.helper;
 
-import pg_d.abi;   // Datum, FunctionCallInfo, Pg_finfo_record
+public import pg_d.abi;   // Datum, FunctionCallInfo, Pg_finfo_record
 import std.traits : hasUDA, Parameters, ReturnType;
 
 /// Marker of exported function

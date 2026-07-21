@@ -1,7 +1,6 @@
 module extension_example;
 
 import pg_d.helper;  // RegisterAllPgFunctions
-import pg_d.abi;     // Datum, FunctionCallInfo, Pg_finfo_record
 import pg_d.fmgr;    // PG_GETARG_* / PG_RETURN_* helpers
 import pg_d.srf;     // SRF functions
 // import pg_d.pgtext;  // optional extra text helpers
